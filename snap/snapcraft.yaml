@@ -1,5 +1,4 @@
 name: subliminal-subtitles
-version: '2.0.5'
 summary: Subtitles, faster than your thoughts
 description: |
   Finds and downloads subtitles from Addic7ed, LegendasTv, NapiProjekt,
@@ -11,9 +10,10 @@ description: |
 
   sudo snap alias subliminal-subtitles subliminal
 
+adopt-info: version
+base: core18
 grade: stable
 confinement: strict
-base: core18
 
 apps:
   subliminal-subtitles:
@@ -21,10 +21,23 @@ apps:
     environment:
       LC_ALL: C.UTF-8
       LANG: C.UTF-8
-    plugs: [home,removable-media,network]
+    plugs:
+      - home
+      - removable-media
+      - network
 
 parts:
-  subliminal:
-    plugin: python
-    source: https://github.com/Diaoul/subliminal.git
+  version:
+    plugin: nil
+    override-build: |
+      snapcraftctl set-version `curl --silent \
+      https://api.github.com/repos/diaoul/subliminal/releases/latest \
+      | jq --raw-output .tag_name`
+    build-packages: [curl, jq]
 
+  subliminal:
+    after: [version]
+    source: https://github.com/diaoul/subliminal.git
+    source-tag: $SNAPCRAFT_PROJECT_VERSION
+    source-depth: 1
+    plugin: python
