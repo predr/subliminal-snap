@@ -1,14 +1,14 @@
 name: subliminal-subtitles
 summary: Subtitles, faster than your thoughts
 description: |
-  Finds and downloads subtitles from Addic7ed, LegendasTv, NapiProjekt,
-  OpenSubtitles, Podnapisi, Shooter, TheSubDB and TVsubtitles providers.
+  Find and download subtitles from most popular subtitle providers, for entire collection or just one video.
 
-  subliminal-subtitles download --language en movie.mp4
+      subliminal-subtitles download --language en movie.mp4
 
-  If you need original name to integrate with other software make an alias with following command:
+  For integration with other apps and scripts make an alias to original name.
 
-  sudo snap alias subliminal-subtitles subliminal
+      snap alias subliminal-subtitles subliminal
+      subliminal --help
 
 adopt-info: version
 base: core18
