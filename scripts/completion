@@ -1,0 +1,162 @@
+#!/bin/bash
+# shellcheck disable=SC2034,SC2207
+
+function _subliminal-subtitles {
+
+    local cur prev words cword split
+    _init_completion -s || return
+
+    local OPTIONS='
+        --addic7ed
+        --legendastv
+        --opensubtitles
+        --omdb
+        --cache-dir
+        --debug
+        --version
+        --help
+    '
+
+    local COMMANDS='
+        cache
+        download
+    '
+
+    local CACHE_ARGS='
+        --clear-subliminal
+    '
+
+    local DOWNLOAD_ARGS='
+        -l
+        --language
+        -p
+        --provider
+        -r
+        --refiner
+        -a
+        --age
+        -d
+        --directory
+        -e
+        --encoding
+        -s
+        --single
+        -f
+        --force
+        -hi
+        --hearing-impaired
+        -m
+        --min-score
+        -w
+        --max-workers
+        -z
+        --archives
+        -Z
+        --no-archives
+        -v
+        --verbose
+    '
+
+    local SELECT_LANGUAGE='
+        de
+        en
+        en-US
+        en-GB
+        es
+        es-MX
+        fi
+        fr
+        it
+        ja
+        ko
+        nl
+        pl
+        pt
+        pt-BR
+        ru
+        sr
+        sv
+        zh-CN
+        zh-TW
+    '
+
+    local SELECT_PROVIDER='
+        addic7ed
+        argenteam
+        legendastv
+        opensubtitles
+        opensubtitlesvip
+        podnapisi
+        shooter
+        thesubdb
+        tvsubtitles
+    '
+
+    local SELECT_REFINER='
+        hash
+        metadata
+        omdb
+        tvdb
+    '
+
+    local SELECT_ENCODING='
+        utf-8
+        cp1250
+        cp1252
+    '
+
+    case " ${words[@]} " in
+        *\ cache\ *)
+            COMPREPLY=($( compgen -W "$CACHE_ARGS" -- "$cur" ))
+            ;;
+        *\ download\ *)
+            case "$prev" in
+                -l|--language)
+                    COMPREPLY=($( compgen -W "$SELECT_LANGUAGE" -- "$cur" ))
+                    ;;
+                -p|--provider)
+                    COMPREPLY=($( compgen -W "$SELECT_PROVIDER" -- "$cur" ))
+                    ;;
+                -r|--refiner)
+                    COMPREPLY=($( compgen -W "$SELECT_REFINER" -- "$cur" ))
+                    ;;
+                -d|--directory)
+                    HOME="$HOME"/../../.. _filedir -d
+                    ;;
+                -a|--age)
+                    COMPREPLY=($( compgen -W "2w" -- "$cur" ))
+                    ;;
+                -e|--encoding)
+                    COMPREPLY=($( compgen -W "$SELECT_ENCODING" -- "$cur" ))
+                    ;;
+                -m|--min-score)
+                    COMPREPLY=("0")
+                    ;;
+                -w|--max-workers)
+                    COMPREPLY=("4")
+                    ;;
+                *)
+                    case "$cur" in
+                        -*)
+                            COMPREPLY=($( compgen -W "$DOWNLOAD_ARGS" -- "$cur" ))
+                            ;;
+                        *)
+                            HOME="$HOME"/../../.. _filedir
+                            ;;
+                    esac
+                    ;;
+            esac
+            ;;
+        *)
+            case "$prev" in
+                --cache-dir)
+                    HOME="$HOME"/../../.. _filedir -d
+                    ;;
+                *)
+                    COMPREPLY=($( compgen -W "$OPTIONS $COMMANDS" -- "$cur" ))
+                    ;;
+            esac
+    esac
+}
+
+complete -F _subliminal-subtitles subliminal-subtitles

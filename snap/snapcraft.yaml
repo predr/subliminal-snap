@@ -18,6 +18,7 @@ confinement: strict
 apps:
   subliminal-subtitles:
     command: bin/subliminal
+    completer: completion
     environment:
       LC_ALL: C.UTF-8
       LANG: C.UTF-8
@@ -41,3 +42,7 @@ parts:
     source-tag: $SNAPCRAFT_PROJECT_VERSION
     source-depth: 1
     plugin: python
+
+  scripts:
+    source: scripts/
+    plugin: dump
